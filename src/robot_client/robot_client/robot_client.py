@@ -1,6 +1,9 @@
 import sys
 
-from example_interfaces.srv import AddTwoInts
+from bira_msgs.srv import PlanTrajectory
+from sensor_msgs.msg import JointState
+from geometry_msgs.msg import PoseStamped
+
 import rclpy
 from rclpy.node import Node
 
@@ -17,16 +20,34 @@ class RobotClient(Node):
     def __init__(self):
         super().__init__('robot_client')
         # TODO: adapt to service name and type
-        self.cli = self.create_client(AddTwoInts, 'add_two_ints')
+        self.cli = self.create_client(PlanTrajectory, 'plan_trajectory')
         
         while not self.cli.wait_for_service(timeout_sec=1.0):
             self.get_logger().info('service not available, waiting again...')
-        self.req = AddTwoInts.Request()
+        self.req = PlanTrajectory.Request()
 
     def send_request(self, a, b):
-        # TODO: adapt to service request
-        self.req.a = a
-        self.req.b = b
+        joint_state = JointState()
+        joint_state.name = ['joint1', 'joint2', 'joint3']
+        joint_state.position = [0.0, 0.5, -0.5]
+        joint_state.velocity = []
+        joint_state.effort = []
+
+        pose = PoseStamped()
+        pose.header.frame_id = 'base_link'
+
+        pose.pose.position.x = 0.4
+        pose.pose.position.y = 0.1
+        pose.pose.position.z = 0.3
+
+        pose.pose.orientation.x = 0.0
+        pose.pose.orientation.y = 0.0
+        pose.pose.orientation.z = 0.0
+        pose.pose.orientation.w = 1.0
+
+        self.req.start_joints = joint_state
+        self.req.final_pos = pose
+
         self.future = self.cli.call_async(self.req)
         # print("Is awaitable: ", inspect.isawaitable(self.future))
         # rclpy.spin_until_future_complete(self, self.future)
@@ -41,7 +62,7 @@ async def main():
     await spin_until_complete(node, future)
 
     response = future.result()
-    node.get_logger().info(f"Result: {response.sum}")
+    node.get_logger().info(f"Result: {response.traj}")
 
     node.destroy_node()
     rclpy.shutdown()
