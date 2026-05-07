@@ -1,0 +1,16 @@
+planner_configs:
+  RRTConnectkConfigDefault:
+    type: geometric::RRTConnect
+    range: 0.0
+  RRTstarkConfigDefault:
+    type: geometric::RRTstar
+    range: 0.0
+    goal_bias: 0.05
+
+meca500_arm:
+  default_planner_config: RRTConnectkConfigDefault
+  planner_configs:
+    - RRTConnectkConfigDefault
+    - RRTstarkConfigDefault
+  projection_evaluator: joints(joint1,joint2)
+  longest_valid_segment_fraction: 0.005

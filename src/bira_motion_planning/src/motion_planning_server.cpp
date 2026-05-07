@@ -12,8 +12,10 @@
  */
 class MotionPlanningServer : public rclcpp::Node {
 public:
-  MotionPlanningServer() : Node("motion_planning_server") {
-    RCLCPP_INFO(this->get_logger(), "Nœud créé. En attente d'initialisation...");
+  MotionPlanningServer() : Node("motion_planning_server",
+      rclcpp::NodeOptions().allow_undeclared_parameters(true)
+                          .automatically_declare_parameters_from_overrides(true)) {
+      RCLCPP_INFO(this->get_logger(), "Nœud créé. En attente d'initialisation...");
   }
 
   void initialize() {
@@ -28,9 +30,23 @@ public:
       throw std::runtime_error("Le RobotModel n'a pas pu être chargé. Vérifiez vos paramètres Launch.");
     }
 
+    std::string plugin = this->get_parameter("planning_plugin").as_string();
+    RCLCPP_INFO(this->get_logger(), "Planning plugin lu : %s", plugin.c_str());
+
     // 2. Configuration de la Pipeline (Plugin OMPL + Adapters)
     planning_pipeline_ = std::make_shared<planning_pipeline::PlanningPipeline>(
-        robot_model, shared_from_this(), "planning_plugin", "request_adapters");
+        robot_model,
+        shared_from_this(),
+        "",  // parameter_namespace
+        "ompl_interface/OMPLPlanner",
+        std::vector<std::string>{
+            "default_planner_request_adapters/AddTimeOptimalParameterization",
+            "default_planner_request_adapters/FixWorkspaceBounds",
+            "default_planner_request_adapters/FixStartStateBounds",
+            "default_planner_request_adapters/FixStartStateCollision",
+            "default_planner_request_adapters/FixStartStatePathConstraints"
+        }
+    );
 
     // 3. Initialisation de la scène de planification (vide)
     planning_scene_ = std::make_shared<planning_scene::PlanningScene>(robot_model);
@@ -54,7 +70,7 @@ private:
     planning_interface::MotionPlanResponse res;
 
     // Configuration OMPL
-    req.group_name = "panda_arm"; 
+    req.group_name = "meca500_arm"; 
     req.allowed_planning_time = 5.0;
     req.num_planning_attempts = 5;
 
@@ -79,7 +95,7 @@ private:
     const double tol_ang = 0.02;
     
     auto goal_constraints = kinematic_constraints::constructGoalConstraints(
-        "panda_link8", request->final_pos, tol_pos, tol_ang);
+        "meca_axis_6_link", request->final_pos, tol_pos, tol_ang);
     req.goal_constraints.push_back(goal_constraints);
 
     // --- CALCUL (THREAD-SAFE) ---

@@ -53,4 +53,30 @@ Le Dockerfile précise toutes les dépendances à installer
 3. Build le node: `colcon build --packages-select bira_motion_planning --symlink-install`
 4. source notre workspace: `source install/setup.bash`
 5. Launch le node: `ros2 launch bira_motion_planning motion_planning.launch.py`
-6. Tester dans un autre terminal (où ROS2 et notre workspace sont source): `ros2 service call /plan_kinematic_path bira_motion_planning/srv/PlanTrajectory "{start_joints: {name: ['panda_joint1', 'panda_joint2', 'panda_joint3', 'panda_joint4', 'panda_joint5', 'panda_joint6', 'panda_joint7'], position: [0.0, -0.785, 0.0, -2.356, 0.0, 1.571, 0.785]}, final_pos: {header: {frame_id: 'panda_link0'}, pose: {position: {x: 0.4, y: 0.1, z: 0.4}, orientation: {x: 1.0, y: 0.0, z: 0.0, w: 0.0}}}}"`
+6. Tester dans un autre terminal (où ROS2 et notre workspace sont source): 
+ros2 service call /plan_kinematic_path bira_motion_planning/srv/PlanTrajectory "{
+  start_joints: {
+    name: [
+      'joint1', 
+      'joint2', 
+      'joint3', 
+      'joint4', 
+      'joint5', 
+      'joint6'
+    ],
+    position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  },
+  final_pos: {
+    header: {
+      frame_id: 'meca_base_link'
+    },
+    pose: {
+      position: {x: 0.2, y: 0.0, z: 0.2},
+      orientation: {x: 0.0, y: 0.0, z: 0.0, w: 1.0}
+    }
+  }
+}"
+
+The meca500 urdf comes from : https://github.com/Vanderbilt-Applied-Robotics-Lab/meca500_ros2
+
+Next : add group_link  

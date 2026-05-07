@@ -27,7 +27,8 @@
 
   <exec_depend>launch_ros</exec_depend>
   <exec_depend>moveit_configs_utils</exec_depend>
-  <exec_depend>moveit_resources_panda_moveit_config</exec_depend>
+  <exec_depend>meca500_description</exec_depend>
+  <exec_depend>meca500_moveit</exec_depend>
 
   <export>
     <build_type>ament_cmake</build_type>
