@@ -42,3 +42,41 @@ rosdep install -r --from-paths ~/ws_moveit/src --ignore-src --rosdistro $ROS_DIS
 7. Launch notre Node: `ros2 launch motion_planning_api motion_planning_api_tutorial.launch.py`
 
 ᕦ(ò_óˇ)ᕤ
+
+## Feature cpp-server
+
+Ce code tourne sur un docker que j'ai créé qu'on peut trouver ici : https://github.com/mtt-ben/ROS2_tutorial
+Le Dockerfile précise toutes les dépendances à installer
+
+1. Aller dans le dossier du workspace
+2. Source ROS2: `source /opt/ros/humble/setup.sh`
+3. Build le node: `colcon build --packages-select bira_motion_planning --symlink-install`
+4. source notre workspace: `source install/setup.bash`
+5. Launch le node: `ros2 launch bira_motion_planning motion_planning.launch.py`
+6. Tester dans un autre terminal (où ROS2 et notre workspace sont source): 
+ros2 service call /plan_kinematic_path bira_motion_planning/srv/PlanTrajectory "{
+  start_joints: {
+    name: [
+      'joint1', 
+      'joint2', 
+      'joint3', 
+      'joint4', 
+      'joint5', 
+      'joint6'
+    ],
+    position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  },
+  final_pos: {
+    header: {
+      frame_id: 'meca_base_link'
+    },
+    pose: {
+      position: {x: 0.2, y: 0.0, z: 0.2},
+      orientation: {x: 0.0, y: 0.0, z: 0.0, w: 1.0}
+    }
+  }
+}"
+
+The meca500 urdf comes from : https://github.com/Vanderbilt-Applied-Robotics-Lab/meca500_ros2
+
+Next : add group_link  
