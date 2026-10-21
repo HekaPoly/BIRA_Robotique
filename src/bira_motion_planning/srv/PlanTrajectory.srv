@@ -1,4 +1,0 @@
-sensor_msgs/JointState start_joints
-geometry_msgs/PoseStamped final_pos
----
-moveit_msgs/MotionPlanResponse traj

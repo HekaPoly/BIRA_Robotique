@@ -3,7 +3,7 @@
 #include <moveit/robot_model_loader/robot_model_loader.h>
 #include <moveit/kinematic_constraints/utils.h>
 #include <moveit/robot_state/conversions.h>
-#include <bira_motion_planning/srv/plan_trajectory.hpp>
+#include <bira_msgs/srv/plan_trajectory.hpp>
 
 #include <mutex>
 
@@ -52,7 +52,7 @@ public:
     planning_scene_ = std::make_shared<planning_scene::PlanningScene>(robot_model);
 
     // 4. Création du Service
-    service_ = this->create_service<bira_motion_planning::srv::PlanTrajectory>(
+    service_ = this->create_service<bira_msgs::srv::PlanTrajectory>(
         "plan_kinematic_path",
         std::bind(&MotionPlanningServer::handle_planning_request, this, std::placeholders::_1, std::placeholders::_2));
 
@@ -61,8 +61,8 @@ public:
 
 private:
   void handle_planning_request(
-      const std::shared_ptr<bira_motion_planning::srv::PlanTrajectory::Request> request,
-      std::shared_ptr<bira_motion_planning::srv::PlanTrajectory::Response> response) {
+      const std::shared_ptr<bira_msgs::srv::PlanTrajectory::Request> request,
+      std::shared_ptr<bira_msgs::srv::PlanTrajectory::Response> response) {
 
     RCLCPP_INFO(this->get_logger(), "Requête reçue. Calcul en cours...");
 
@@ -119,7 +119,7 @@ private:
   std::shared_ptr<robot_model_loader::RobotModelLoader> robot_model_loader_;
   std::shared_ptr<planning_pipeline::PlanningPipeline> planning_pipeline_;
   std::shared_ptr<planning_scene::PlanningScene> planning_scene_;
-  rclcpp::Service<bira_motion_planning::srv::PlanTrajectory>::SharedPtr service_;
+  rclcpp::Service<bira_msgs::srv::PlanTrajectory>::SharedPtr service_;
   std::mutex planning_mutex_;
 };
 
