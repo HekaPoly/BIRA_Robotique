@@ -20,7 +20,6 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'service = robot_client.service_member_function:main',
             'client = robot_client.robot_client:main',
         ],
     },

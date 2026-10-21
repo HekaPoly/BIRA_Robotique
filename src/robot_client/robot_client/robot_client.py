@@ -19,8 +19,7 @@ class RobotClient(Node):
 
     def __init__(self):
         super().__init__('robot_client')
-        # TODO: adapt to service name and type
-        self.cli = self.create_client(PlanTrajectory, 'plan_trajectory')
+        self.cli = self.create_client(PlanTrajectory, 'plan_kinematic_path')
         
         while not self.cli.wait_for_service(timeout_sec=1.0):
             self.get_logger().info('service not available, waiting again...')
@@ -28,17 +27,17 @@ class RobotClient(Node):
 
     def send_request(self, a, b):
         joint_state = JointState()
-        joint_state.name = ['joint1', 'joint2', 'joint3']
-        joint_state.position = [0.0, 0.5, -0.5]
+        joint_state.name = ['joint1', 'joint2', 'joint3', 'joint4', 'joint5', 'joint6']
+        joint_state.position = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
         joint_state.velocity = []
         joint_state.effort = []
 
         pose = PoseStamped()
-        pose.header.frame_id = 'base_link'
+        pose.header.frame_id = 'meca_base_link'
 
-        pose.pose.position.x = 0.4
-        pose.pose.position.y = 0.1
-        pose.pose.position.z = 0.3
+        pose.pose.position.x = 0.2
+        pose.pose.position.y = 0.0
+        pose.pose.position.z = 0.2
 
         pose.pose.orientation.x = 0.0
         pose.pose.orientation.y = 0.0
