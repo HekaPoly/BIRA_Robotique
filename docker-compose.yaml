@@ -1,0 +1,16 @@
+services:
+  ros_dev:
+    build: .
+    image: osrf/ros:humble-desktop
+    container_name: ros2_humble_dev
+    network_mode: host
+    privileged: true
+    environment:
+      - DISPLAY=${DISPLAY}
+      - NVIDIA_DRIVER_CAPABILITIES=all
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      - .:/root/robotique  # Maps the current folder to the container
+    stdin_open: true
+    tty: true
+    command: /bin/bash
