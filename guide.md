@@ -83,3 +83,9 @@ RViz devrait s'ouvrir sur le bureau de votre machine.
 ```bash
 xhost -si:localuser:root
 ```
+
+## 7. Rouler la Demo de moveit 
+
+```bash
+ros2 launch moveit_resources_panda_moveit_config demo.launch.py 
+```
