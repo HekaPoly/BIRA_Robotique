@@ -1,0 +1,23 @@
+services:
+  moveit:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+
+    container_name: bira_moveit
+
+    environment:
+      DISPLAY: ${DISPLAY}
+      QT_X11_NO_MITSHM: "1"
+
+    volumes:
+      - .:/root/ws_moveit
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+
+    working_dir: /root/ws_moveit
+
+    stdin_open: true
+    tty: true
+    init: true
+
+    command: sleep infinity
