@@ -2,7 +2,7 @@
 
 # Author: Garrison Johnston 12/2025
 cartesian_limits:
-  max_trans_vel: 5.0 # see page 42 of hardware manual
-  max_trans_acc: 2.25
-  max_trans_dec: -5.0
-  max_rot_vel: 1.57
+  max_trans_vel: 0.25  # m/s
+  max_trans_acc: 0.5   # m/s^2
+  max_trans_dec: -0.5  # m/s^2
+  max_rot_vel: 0.5     # rad/s
