@@ -1,24 +1,24 @@
-FROM osrf/ros:humble-desktop
+FROM tiryoh/ros2-desktop-vnc:humble
 
-# Install the tutorial tools and MoveIt 2 so they are always there
+# Outils de base + MoveIt 2
 RUN apt-get update && apt-get install -y \
-    ros-humble-turtlesim \
     ros-humble-moveit \
     ros-humble-moveit-visual-tools \
-    ros-humble-rviz-visual-tools \
-    ros-humble-tf2-geometry-msgs \
-    ros-humble-interactive-markers \
-    ros-humble-rmw-cyclonedds-cpp \
-    ros-humble-moveit-resources-panda-description \
-    ros-humble-moveit-resources-panda-moveit-config \
-    python3-colcon-common-extensions \
-    python3-colcon-mixin \
     python3-rosdep \
-    python3-vcstool \
-    git \
-    && rm -rf /var/lib/apt/lists/*  
+    && rm -rf /var/lib/apt/lists/*
 
-RUN echo "source /opt/ros/humble/setup.bash" > /root/.bashrc
+# Dépendances déclarées dans les package.xml du repo
+COPY src /tmp/src
+RUN apt-get update \
+    && (rosdep init || true) \
+    && rosdep update --rosdistro humble \
+    && rosdep install --from-paths /tmp/src --ignore-src --rosdistro humble -y \
+    && rm -rf /var/lib/apt/lists/* /tmp/src
 
-# Install and update the default colcon mixins
-RUN colcon mixin update default
+# Libs du tuto
+RUN apt-get update && apt-get install -y \
+    ros-humble-turtlesim \
+    && rm -rf /var/lib/apt/lists/*
+
+# Source ROS 2
+RUN echo "source /opt/ros/humble/setup.bash" >> /etc/bash.bashrc

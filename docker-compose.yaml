@@ -1,16 +1,13 @@
 services:
-  ros_dev:
+  ros2_desktop:
     build: .
-    image: osrf/ros:humble-desktop
-    container_name: ros2_humble_dev
-    network_mode: host
-    privileged: true
-    environment:
-      - DISPLAY=${DISPLAY}
-      - NVIDIA_DRIVER_CAPABILITIES=all
+    image: bira/ros2-humble-vnc
+    container_name: ros2_humble_desktop
+    security_opt:
+      - seccomp:unconfined
+    shm_size: "512m"
+    restart: unless-stopped
+    ports:
+      - "6080:80"   # interface web -> http://localhost:6080
     volumes:
-      - /tmp/.X11-unix:/tmp/.X11-unix:rw
-      - .:/root/robotique  # Maps the current folder to the container
-    stdin_open: true
-    tty: true
-    command: /bin/bash
+      - ./src:/home/ubuntu/BIRA/src
