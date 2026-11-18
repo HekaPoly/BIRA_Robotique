@@ -1,5 +1,5 @@
 //hmmm je vais devoir ajuster au fur et à mesure de la compilation
-cmake_minimum_required
+cmake_minimum_required(VERSION 3.8)
 project(bira_motor_control)
 
 set(CMAKE_CXX_STANDARD 17)
@@ -11,10 +11,10 @@ find_package(trajectory_msgs REQUIRED)
 
 include_directories(include)
 
-add_library(uart_lib src/uart.cpp)
+add_library(uart_lib STATIC src/uart.cpp)
 
 add_executable(motor_control_node
-    src/motor_control_node.cpp
+    src/control_moteurdenode.cpp
 )
 
 add_executable(uart_node
