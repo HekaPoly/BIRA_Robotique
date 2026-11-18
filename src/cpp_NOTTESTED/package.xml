@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package format="3">
+    <name>bira_motor_control</name>
+    <version>0.0.1</version>
+
+    <description>Robot arm motor control</description>
+
+    <maintainer email="maintainer@example.com">HEKA</maintainer>
+    <license>TODO</license>
+
+    <buildtool_depend>ament_cmake</buildtool_depend>
+
+    <depend>rclcpp</depend>
+    <depend>std_msgs</depend>
+    <depend>trajectory_msgs</depend>
+
+    <exec_depend>launch</exec_depend>
+    <exec_depend>launch_ros</exec_depend>
+
+    <export>
+        <build_type>ament_cmake</build_type>
+    </export>
+</package>
